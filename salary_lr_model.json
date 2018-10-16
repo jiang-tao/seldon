@@ -1,0 +1,53 @@
+{
+    "apiVersion": "machinelearning.seldon.io/v1alpha2",
+    "kind": "SeldonDeployment",
+    "metadata": {
+        "labels": {
+            "app": "seldon"
+        },
+        "name": "salary-lr-model"
+    },
+    "spec": {
+        "annotations": {
+            "project_name": "salary_lr_model",
+            "deployment_version": "v1.0"
+        },
+        "name": "salary-lr-model",
+        "oauth_key": "oauth-key",
+        "oauth_secret": "oauth-secret",
+        "predictors": [
+            {
+                "componentSpecs": [{
+                    "spec": {
+                        "containers": [
+                            {
+                                "image": "salary_lr_model:1.0",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "salary-lr-predictor",
+                                "resources": {
+                                    "requests": {
+                                        "memory": "200Mi"
+                                    }
+                                }
+                            }
+                        ],
+                        "terminationGracePeriodSeconds": 20
+                    }
+                }],
+                "graph": {
+                    "children": [],
+                    "name": "salary-lr-predictor",
+                    "endpoint": {
+			            "type" : "REST"
+		             },
+                    "type": "MODEL"
+                },
+                "name": "single-model",
+                "replicas": 1,
+		        "annotations": {
+		            "predictor_version" : "v1"
+		        }
+            }
+        ]
+    }
+}
